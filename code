@@ -1,0 +1,168 @@
+import time
+#define variables
+register = False
+login_output = ''
+users = {
+'admin': ['admin','admin',[]]
+}
+user = []
+IDs = ['admin']
+ads = ['ADMIN']
+names = ['ADMIN']
+booksw = []
+book_choice = ''
+books_list = [
+'THE GREAT GATSBY',
+'THE GRAPES OF WRATH',
+'NINTEEN EIGHTY FOUR',
+'ULYSSES',
+'MOBY DICK',
+'LOLITA',
+'CATCH-22',
+'THE CATCHER IN THE RYE',
+'BELOVED',
+'THE SOUND AND THE FURY',
+'TO KILL A MOCKINGBIRD',
+'THE LORD OF THE RINGS',
+'ONE HUNDRED YEARS OF SOLITUDE',
+'BRAVE NEW WORLD',
+'TO THE LIGHTHOUSE'
+]
+checked = []
+class user():
+    def __init__(self,name,address,ID):
+        self.name = name
+        self.address = address
+        self.ID = ID
+        self.books = booksw
+def logged_in_page():
+    while True:
+        print('''
+------------------        
+1 to check out
+2 to return book
+3 to lookup account
+4 to sign out
+5 to check available books
+------------------  
+''')
+        logged_in_page_input = input('> ')
+        if logged_in_page_input == '4':
+            login_register_prompt()
+        elif logged_in_page_input == '1':
+            print(books_list)
+            book_choice = input('> ').upper()
+            if book_choice in books_list:
+                while True:
+                    idcheck = str(input('Please type in your ID: '))
+                    if idcheck in IDs:
+                        books_list.remove(book_choice)
+                        checked.append(book_choice)
+                        x= users[idcheck][2]
+                        x.append(book_choice)
+                        break
+                    else:
+                        print('invalid ID')
+                print('Done have fun reading your book! ')
+        elif logged_in_page_input == '2':
+            while True:
+                idcheck = str(input('Please type in your ID: '))
+                if idcheck in IDs:
+                    x = users[idcheck][2]
+                    break
+                else:
+                    print('Invalid ID')
+            while True:
+                print('Chose book to return')
+                print(x)
+                return_choice = input('> ').upper()
+                if return_choice in x:
+                    checked.remove(return_choice)
+                    books_list.append(return_choice)
+                    x.remove(return_choice)
+                    print('Thank you for returning your book!')
+                    break
+
+        elif logged_in_page_input == '3':
+            while True:
+                idcheck = input('Verify your ID: ')
+                if idcheck in IDs:
+                    break
+            x = users[idcheck]
+            print(f'''
+Name: {x[0]}
+Address: {x[1]}
+ID: {idcheck}
+Books: {x[2]}
+''')
+        elif logged_in_page_input == '5':
+            for bookers in books_list:
+                print(bookers)
+            time.sleep(2)
+        else:
+            print('Invalid Command')
+
+
+
+def login_register_prompt():
+    global member
+    global idy
+    global namey
+    global addressy
+    while True:
+        print('[R]egister or [L]ogin')
+        login_output = input('> ').lower()
+        if login_output == 'r':
+            while True:
+                idy = str(input('Create account ID: '))
+                if len(idy) == 4:
+                    if idy not in IDs:
+                        IDs.append(idy)
+                        break
+                    else:
+                        print('\nID already being used\n')
+                else:
+                    print('ID has to be 4 digits\n')
+            while True:
+                namey = input('Name: ').upper()
+                if len(namey) > 2:
+                    if namey not in names:
+                        names.append(namey)
+                        break
+                else:
+                    print('thats not a name')
+            while True:
+                addressy = input('Address: ').upper()
+                if addressy not in ads:
+                    ads.append(addressy)
+                    break
+                else:
+                    print('Address taken....')
+            member = user(namey, addressy, idy)
+            users[idy] =[member.name,member.address,[]]
+            logged_in_page()
+        if login_output == 'l':
+            while True:
+                login_ID = str(input("\ntype '1' to go back to register at any time! \nID: "))
+                if login_ID == '1':
+                    break
+                if login_ID in IDs:
+                    print('\nSuccesfully signed in!...\n')
+                    print('\nSending to login hub!\n')
+                    time.sleep(1)
+                    logged_in_page()
+                    break
+                else:
+                    print('Invalid ID')
+
+
+
+
+
+
+def main():
+        login_register_prompt()
+
+
+if __name__ == '__main__':
+    main()
